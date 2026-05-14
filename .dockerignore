@@ -1,27 +1,40 @@
-# Dependencias
+# dependencias
 node_modules
-npm-debug.log
 
-# Build Angular
+# build angular
 dist
+.angular
+.cache
 
-# Git
+# logs
+logs
+*.log
+npm-debug.log*
+
+# variables de entorno
+.env
+.env.*
+
+# git
 .git
 .gitignore
 
-# Docker
-Dockerfile
+# docker
 .dockerignore
+docker-compose.yml
 
-# IDEs
+# ide / editores
 .vscode
 .idea
 
-# Sistema operativo
+# sistema operativo
 .DS_Store
 Thumbs.db
 
-# Archivos temporales
+# archivos temporales
 tmp
 temp
 coverage
+
+# documentacion opcional
+README.md
