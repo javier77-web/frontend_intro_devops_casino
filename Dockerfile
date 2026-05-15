@@ -1,5 +1,5 @@
 # Desarrollo Angular
-FROM node:20-alpine
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -9,14 +9,23 @@ COPY package*.json ./
 # Instalar dependencias
 RUN npm install
 
-# Angular CLI 
-RUN npm install -g @angular/cli
-
 # Copiar proyecto
 COPY . .
 
-# Puerto Angular
-EXPOSE 4200
+# Build producción Angular
+RUN npm run build
 
-# Ejecutar Angular
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+# Etapa 2: Runtime
+FROM nginxinc/nginx-unprivileged:1.27-alpine AS runtime
+
+# Copiar build Angular
+COPY --from=builder --chown=nginx:nginx /app/dist /usr/share/nginx/html
+
+# Copiar configuración Nginx
+COPY --chown=nginx:nginx nginx.conf /etc/nginx/templates/default.conf.template
+
+# Usuario no root
+USER nginx
+
+# Puerto nginx-unprivileged
+EXPOSE 8080
